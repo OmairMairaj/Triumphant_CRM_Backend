@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const VehicleSale = require('../models/VehicleSale');
+const User = require('../models/User');
 
 // Get all vehicle sales (Admin only)
 router.get('/', auth, async (req, res) => {
