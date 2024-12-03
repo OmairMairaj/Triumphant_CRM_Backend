@@ -16,7 +16,7 @@ app.use(express.json());
 
 // CORS Middleware
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://your-production-frontend-domain.com'], // Replace with your production domain
+    origin: ['http://localhost:3000', 'https://crm.triumphantjp.com/'], // Replace with your production domain
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-auth-token'],
     credentials: true,
