@@ -15,26 +15,15 @@ const app = express();
 app.use(express.json());
 
 // CORS Middleware
-const allowedOrigins = [
-    'http://localhost:3000',
-    'https://triumphant-crm-backend.vercel.app'
-];
-
 const corsOptions = {
-    origin: function (origin, callback) {
-        if (allowedOrigins.includes(origin) || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: ['http://localhost:3000', 'https://your-production-frontend-domain.com'], // Replace with your production domain
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-auth-token'],
     credentials: true,
 };
 app.use(cors(corsOptions));
 
-// Preflight request handling for all routes
+// Preflight request handling
 app.options('*', cors(corsOptions));
 
 // Routes
