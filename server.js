@@ -13,7 +13,18 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
+// CORS Middleware
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://your-production-frontend-domain.com'], // Update with your domains
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'x-auth-token'],
+    credentials: true,
+};
+app.use(cors(corsOptions));
+
+// Preflight request handling
+app.options('*', cors(corsOptions));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -23,5 +34,5 @@ app.use('/api/users', require('./routes/userRoutes'));
 // Sample route for testing
 app.get('/', (req, res) => res.send('API Running...'));
 
-// Export the app, do not start a server
+// Export the app for serverless deployment
 module.exports = app;
