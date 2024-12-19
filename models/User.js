@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isValidPhoneNumber } = require('libphonenumber-js');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -16,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'customer'],
+        enum: ['admin', 'employee', 'customer'],
         default: 'customer',
     },
     phone: {
@@ -24,7 +25,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (v) {
-                return /\d{10}/.test(v); // Assuming the phone number should be 10 digits
+                return isValidPhoneNumber(v); // Automatic international validation
             },
             message: props => `${props.value} is not a valid phone number!`
         }
@@ -33,6 +34,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'active', 'suspended'],
         default: 'pending',
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Refers to the admin who created the employee
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,

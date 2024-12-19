@@ -34,5 +34,13 @@ app.use('/api/users', require('./routes/userRoutes'));
 // Sample route for testing
 app.get('/', (req, res) => res.send('API Running...'));
 
+// Define PORT
+const PORT = process.env.PORT || 5000;
+
+// Start server and log port
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
 // Export the app for serverless deployment
 module.exports = app;

@@ -83,7 +83,7 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, email, password, role, phone } = req.body;
+        const { name, email, password, phone } = req.body;
         try {
             let user = await User.findOne({ email });
             if (user) {
@@ -93,7 +93,7 @@ router.post(
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            user = new User({ name, email, password: hashedPassword, role, phone, status: 'pending' });
+            user = new User({ name, email, password: hashedPassword, role: 'customer', phone, status: 'pending', createdBy: null });
             await user.save();
 
             res.status(201).json({ msg: 'User registered successfully. Awaiting admin approval.' });
@@ -126,29 +126,37 @@ router.post(
         try {
             const user = await User.findOne({ email });
 
+            // Check if the user exists
+            if (!user) {
+                return res.status(404).json({ msg: 'User not found' });
+            }
+
+            // Verify password
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res.status(400).json({ msg: 'Invalid credentials' });
             }
 
-            if (!user) {
-                return res.status(400).json({ msg: 'Invalid credentials' });
-            }
+            // Check account status
             if (user.status === 'suspended') {
                 return res.status(403).json({ msg: 'Your account has been suspended.' });
             } else if (user.status === 'pending') {
                 return res.status(403).json({ msg: 'Your account is awaiting admin approval.' });
             }
+
+            // Generate JWT Token
             const token = generateToken(user);
 
-            // Exclude sensitive fields like password
+            // Exclude sensitive fields before sending the response
             const { id, name, role } = user;
             res.json({ token, user: { id, name, email, role } });
+
         } catch (err) {
-            console.error(err.message);
-            res.status(500).send('Server error');
+            console.error('Login Error:', err.message);
+            res.status(500).json({ msg: 'Server Error' });
         }
     }
 );
+
 
 module.exports = router;
