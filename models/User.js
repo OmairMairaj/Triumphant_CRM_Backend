@@ -23,12 +23,12 @@ const UserSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
-        validate: {
-            validator: function (v) {
-                return isValidPhoneNumber(v); // Automatic international validation
-            },
-            message: props => `${props.value} is not a valid phone number!`
-        }
+        // validate: {
+        //     validator: function (v) {
+        //         return isValidPhoneNumber(v); // Automatic international validation
+        //     },
+        //     message: props => `${props.value} is not a valid phone number!`
+        // }
     },
     status: {
         type: String,

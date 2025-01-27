@@ -75,7 +75,7 @@ router.post(
         check('name', 'Name is required').not().isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be at least 6 characters').isLength({ min: 6 }),
-        check('phone', 'Phone is required and must be a valid number').matches(/\d{10}/)
+        // check('phone', 'Phone is required and must be a valid number').matches(/\d{10}/)
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -99,7 +99,7 @@ router.post(
             res.status(201).json({ msg: 'User registered successfully. Awaiting admin approval.' });
         } catch (err) {
             console.error(err.message);
-            res.status(500).send('Server error');
+            res.status(500).json({ mg: 'Server error', error: err.message });
         }
     }
 );

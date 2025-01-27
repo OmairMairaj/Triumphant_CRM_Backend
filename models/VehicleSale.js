@@ -23,8 +23,8 @@ const VehicleSaleSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['in progress', 'shipped', 'delivered'],
-        default: 'in progress',
+        enum: ['pending', 'in progress', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending',
     },
     seller: {
         type: mongoose.Schema.Types.ObjectId,
